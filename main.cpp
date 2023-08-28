@@ -59,7 +59,8 @@ class De_Bruijn_Graph {
     public:
         int m_lines, m_line_size, m_kmer, m_no_vertices;
         int *m_k_1_mers_int_11; // k-1 mers at int form
-        std::string *m_k_1_mers_string_11; // k-1 mers at int form
+        std::string *m_k_1_mers_string_11; // k-1 mers at string form.
+                                           // This pointer-array it is used to print the graph correctly.
         Amino **m_k_1_mers11;   // k-1 mers at Amino form
 
         std::vector<Amino> m_aminos;
@@ -163,7 +164,9 @@ class De_Bruijn_Graph {
             }
             
             // =====================
-
+            // We create those two arrays k_1_mers_int and k_1_mers_string in order 
+            // to have acces to those values by m_k_1_mers11 and m_k_1_mers_string_11
+            // by the other functions of the class.
             int k_1_mers_int[(m_line_size-(m_kmer-1))*m_lines*2];
             std::string k_1_mers_string[(m_line_size-(m_kmer-1))*m_lines*2];
             
@@ -245,15 +248,13 @@ class De_Bruijn_Graph {
         
 
         void create_the_graph(){
-
-
             int counter = 0;
             for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
                 if(! elementExistsInVector(m_vec1, m_k_1_mers_int_11[i])){
                     m_vec1.push_back(m_k_1_mers_int_11[i]);  
                     m_vec2.push_back(i);             
                     m_vec3.push_back(counter);
-                    m_node.push_back(m_k_1_mers_string_11[i]);
+                    m_node.push_back(m_k_1_mers_string_11[i]); 
                     counter++;
                 }
                 
