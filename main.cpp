@@ -188,20 +188,6 @@ class De_Bruijn_Graph {
                 k_1_mers_string[i] = s2;
 
             }
-            // FOR TESTING
-
-            /* std::cout<< "\nk-1 mers\n";
-            for(int i=0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
-                std::string s="";
-                char h;
-                for(int j =0 ; j < m_kmer-1; j++){
-                    
-                    h = static_cast<char>(static_cast<int>(k_1_mer[i][j]) + 'A' - 1);
-                    s = s +  h;
-                }
-                std::cout << s << "\n";
-            } */
-            // =====================
             // Dynamically allocate memory for two_mers11
             m_k_1_mers11 = new Amino*[(m_line_size-(m_kmer-1))*m_lines*2];
             for (int i = 0; i < ((m_line_size-(m_kmer-1))*m_lines*2); i++) {
@@ -242,6 +228,7 @@ class De_Bruijn_Graph {
             return -1;
         }
         // Add edge, including self-loop
+        // We will have one edge per kmer.
         void addEdge(int s, int d) {
             m_adj[s].push_back(d);
         }
@@ -259,6 +246,7 @@ class De_Bruijn_Graph {
                 }
                 
             }
+            // We will have one node per distinct k-1 mer.
             m_no_vertices = counter;
             m_adj = new std::vector<int>[m_no_vertices];
             
@@ -287,6 +275,10 @@ class De_Bruijn_Graph {
         
         }
         // Print the graph
+        // Keep in mind that the walk that allows us to reconstruct the genome 
+        // is the walk that crosses each edge exactly once, wich means that, 
+        // uses each k-mer exactly once.
+        // This is the eulerian walk.
         void printGraph() {
             for (int d = 0; d < m_no_vertices; ++d) {
                 std::cout << "\n Vertex " << m_node[d] << ":";
