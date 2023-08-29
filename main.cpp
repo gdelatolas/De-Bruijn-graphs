@@ -348,7 +348,7 @@ class De_Bruijn_Graph {
                 {
                     start_nodes++;
                     start_node = i;
-                    std::cout << m_node[i] << "\n";
+                    std::cout << "m_node[i] = " << m_node[i] << "\n";
                 }
                 else if(in - out == 1)
                     end_nodes++;
@@ -437,7 +437,8 @@ int main(){
     g1.create_the_graph();
     g1.printGraph();
 
-    // I HAVE TO FIX THE START NODE-> IT HAS TO BE THE ONE WITH IN = OUT + 1 OR OUT = IN + 1
+    // The start node changes inside the find_Euler function. 
+    // So, we can pass any argument we want.
     if (g1.find_Euler(g1.m_vec1[0]) > 0)
         g1.findEuler_Path_Cycle();   
 
