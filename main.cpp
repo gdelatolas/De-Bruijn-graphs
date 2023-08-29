@@ -72,7 +72,7 @@ class De_Bruijn_Graph {
         
         // Add edge, including self-loop
         std::vector<int> *m_adj; // Change to pointer
-        
+        std::vector<int> path; // we will store the eulerian path.s
 
         De_Bruijn_Graph(){
 
@@ -288,6 +288,11 @@ class De_Bruijn_Graph {
                 std::cout<<"\n";
             }
         }
+        
+        
+
+
+    
         // Destructor
         ~De_Bruijn_Graph() {
             // Deallocate m_k_1_mers11
@@ -306,7 +311,124 @@ class De_Bruijn_Graph {
             // Deallocate m_adj (the dynamically allocated array of vectors)
             delete[] m_adj;
         }
-        
+                
+        void printEulerianPathCycle(int start_node)
+        {
+            std::vector<int> circuit;
+
+            while(m_adj[start_node].size())
+            {
+                int next_node = m_adj[start_node].back();
+                m_adj[start_node].pop_back();
+                printEulerianPathCycle(next_node);
+            }
+
+            circuit.push_back(start_node);
+            
+            for(auto node: circuit)
+                std::cout << m_node[node] << " <- ";
+        }
+
+        int find_Euler(int start_node)
+        {
+            if(!Strongly_Connected_Graph())	{//multi-component edged graph
+                std::cout << "The graph is not fully-connected.";
+                return 0;		//All non-zero degree vertices should be connected
+
+            } 
+            // Counting in-degrees and out-degrees
+            int start_nodes = 0, end_nodes = 0;
+            for(int i = 0; i < m_no_vertices; ++i)
+            {
+                int in = in_degree(i);
+                int out = out_degree(i);
+                if(out - in > 1 or in - out > 1)
+                    return 0;
+                else if(out - in == 1)
+                {
+                    start_nodes++;
+                    start_node = i;
+                    std::cout << m_node[i] << "\n";
+                }
+                else if(in - out == 1)
+                    end_nodes++;
+            }
+            std::cout << start_nodes << "  " << end_nodes << "\n";
+            // Only start and end nodes can have in-degree and out-degree difference
+            if(start_nodes == end_nodes and (start_nodes == 0 or start_nodes == 1))
+                return (start_nodes == 0) ? 2 : 1;
+
+            return 0;
+        }
+
+        void findEuler_Path_Cycle()
+        {
+            int start_node = 0;
+            int ret = find_Euler(start_node);
+            if(ret == 0)
+                std::cout << "Graph is NOT an Euler graph\n";
+            else if(ret == 1)
+            {
+                std::cout << "Graph is Semi-Eulerian\n";
+                printEulerianPathCycle(start_node);
+            }
+            else
+            {
+                std::cout << "Graph is Eulerian (Euler circuit)\n";
+                printEulerianPathCycle(start_node);
+            }
+            std::cout << "\n";
+        }
+    private:
+
+        void DFS(int curr, std::vector<bool>& visited, std::vector<int>& path)
+        {
+            visited[curr] = true;
+            path.push_back(curr);
+            for(auto it: m_adj[curr])
+            {
+                if(!visited[it])
+                    DFS(it, visited, path);
+            }
+        }
+        bool Strongly_Connected_Graph()
+        {
+            std::vector<bool> visited(m_no_vertices+1, false);
+            int node = -1;	//Node to start DFS
+            for(int i = 0; i < m_no_vertices; ++i)
+                if(m_adj[i].size() > 0)
+                {
+                    node = i;	//Found a node to start DFS
+                    break;
+                }
+            if(node == -1)	//No start node was found-->No edges are present in graph
+                return true; //It's always Eulerian
+
+            DFS(node, visited, path);
+            //Check if all the non-zero vertices are visited
+            for(int i = 0; i < m_no_vertices; ++i)
+                if(visited[i] == false and m_adj[i].size() > 0)
+                    return false;	//We have edges in multi-component
+            return true;
+        }
+        int in_degree(int v)
+        {
+            int degree = 0;
+            for(int i = 0; i < m_no_vertices; i++)
+            {
+                for(auto it: m_adj[i])
+                {
+                    if(it == v)
+                        degree++;
+                }
+            }
+            return degree;
+        }
+
+        int out_degree(int v)
+        {
+            return m_adj[v].size();
+        }
 };
 
 int main(){
@@ -315,4 +437,10 @@ int main(){
     g1.create_the_graph();
     g1.printGraph();
 
+    // I HAVE TO FIX THE START NODE-> IT HAS TO BE THE ONE WITH IN = OUT + 1 OR OUT = IN + 1
+    if (g1.find_Euler(g1.m_vec1[0]) > 0)
+        g1.findEuler_Path_Cycle();   
+
+        
+    
 }
