@@ -311,7 +311,7 @@ class De_Bruijn_Graph {
             // Deallocate m_adj (the dynamically allocated array of vectors)
             delete[] m_adj;
         }
-                
+        std::vector<int> m_final_path;        
         void printEulerianPathCycle(int start_node)
         {
             std::vector<int> circuit;
@@ -326,7 +326,16 @@ class De_Bruijn_Graph {
             circuit.push_back(start_node);
             
             for(auto node: circuit)
-                std::cout << m_node[node] << " <- ";
+                m_final_path.push_back(node);
+        }
+        void print_Euler_path(){
+            for(int i = m_final_path.size() - 1; i >= 0; i--){
+                int node = m_final_path[i];
+                if(i != 0)
+                    std::cout << m_node[node] << " -> ";
+                else
+                    std::cout << m_node[node];
+            }
         }
 
         int find_Euler(int start_node)
@@ -361,7 +370,7 @@ class De_Bruijn_Graph {
             return 0;
         }
 
-        void findEuler_Path_Cycle()
+        void create_Euler_Path_Cycle()
         {
             int start_node = 0;
             int ret = find_Euler(start_node);
@@ -439,8 +448,10 @@ int main(){
 
     // The start node changes inside the find_Euler function. 
     // So, we can pass any argument we want.
-    if (g1.find_Euler(g1.m_vec1[0]) > 0)
-        g1.findEuler_Path_Cycle();   
+    if (g1.find_Euler(g1.m_vec1[0]) > 0){
+        g1.create_Euler_Path_Cycle();   
+        g1.print_Euler_path();
+    }
 
         
     
