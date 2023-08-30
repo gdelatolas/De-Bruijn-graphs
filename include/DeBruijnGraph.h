@@ -93,7 +93,7 @@ class De_Bruijn_Graph {
         std::vector<int>* m_adj; // Array of std::vectors. 
                                  // This is our graph.
 
-        std::vector<int> path; // we will store the eulerian path.
+        std::vector<int> path; // It is used for DFS.
 };
 
 #endif // DEBRUIJNGRAPH_H
