@@ -281,6 +281,7 @@ void De_Bruijn_Graph::print_eulerian_path_cycle(int start_node)
     for(auto node: circuit)
         m_final_path.push_back(node);
 }
+
 void De_Bruijn_Graph::print_euler_path(){
     for(int i = m_final_path.size() - 1; i >= 0; i--){
         int node = m_final_path[i];
@@ -293,7 +294,7 @@ void De_Bruijn_Graph::print_euler_path(){
 
 int De_Bruijn_Graph::find_euler(int start_node)
 {
-    if(!strongly_connected_graph())	{//multi-component edged graph
+    if(!strongly_connected_graph())	{   //multi-component edged graph
         std::cout << "The graph is not fully-connected.";
         return 0;		//All non-zero degree vertices should be connected
 
@@ -315,7 +316,7 @@ int De_Bruijn_Graph::find_euler(int start_node)
         else if(in - out == 1)
             end_nodes++;
     }
-    std::cout << start_nodes << "  " << end_nodes << "\n";
+    
     // Only start and end nodes can have in-degree and out-degree difference
     if(start_nodes == end_nodes and (start_nodes == 0 or start_nodes == 1))
         return (start_nodes == 0) ? 2 : 1;
