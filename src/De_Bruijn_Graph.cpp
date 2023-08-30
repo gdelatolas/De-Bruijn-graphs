@@ -1,5 +1,5 @@
 #include "../include/DeBruijnGraph.h"
-#include <iostream>
+
 
 std::unordered_map<char, Amino> aminoMap = {
         {'A', Amino::A},
@@ -26,46 +26,14 @@ std::unordered_map<char, Amino> aminoMap = {
 
 
 
-
-
 // Constructor
-De_Bruijn_Graph::De_Bruijn_Graph() {
+De_Bruijn_Graph::De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector<std::vector<Amino>> aminos){
 
-    std::cout << "Input the number of lines: ";
-    std::cin >> m_lines;
+    m_lines = lines;
 
-    std::cout << "Input the size of each line: ";
-    std::cin >> m_line_size;
+    m_line_size = line_size;
 
-    //The vector aminos stores our input lines.
-    std::vector<std::vector<Amino>> aminos(m_lines, std::vector<Amino>());
-
-    for (int i = 0; i < m_lines; i++){
-        
-        std::cout << "Input a sequence of "<<m_line_size<<" amino acids as letters (A, B, ..., T): ";
-        std::string userInput;
-        std::cin >> userInput;
-        for (char c : userInput) {
-            if (aminoMap.find(c) != aminoMap.end()) 
-                aminos[i].push_back(aminoMap[c]);
-            
-            else 
-                std::cout << "Invalid amino acid: " << c << "\n";
-        } 
-    }
-    std::cout << "size = " << aminos.size() << "\n";
-    //PRINTING THE aminos VECTOR.  
-    std::cout << "\nAminos\n";
-    for (int i = 0; i < m_lines; i++) {
-        for (Amino amino : aminos[i]) {
-            char aminoChar = static_cast<char>(static_cast<int>(amino) + 'A' - 1);
-            std::cout << aminoChar;
-        }
-        std::cout << "\n";
-    } 
-        
-    std::cout << "Input the k-mer you want: ";
-    std::cin >> m_kmer;
+    m_kmer = kmer;
     
     // X dimension of k_mer array must have the size (m_line_size-(m_kmer-1))*m_lines.
     // (m_line_size-(m_kmer-1)) is the number of k_mers we can extract from an input line,
@@ -74,7 +42,8 @@ De_Bruijn_Graph::De_Bruijn_Graph() {
     // So, we have four 3-mers, 6-(3-1) = 4.
     // We extract the same amount of k-mers from each input line, due to that
     // we multiply with m_line (number of the input lines).
-    Amino k_mer[(m_line_size-(m_kmer-1))*m_lines][m_kmer];
+
+    Amino k_mer[(m_line_size-(m_kmer-1))*m_lines][m_kmer];  //  2-D Amino array.
 
     int counter = 0 ; // counter is used to identify the input line.
     int index = 0;    // index indicates the line of the k_mer array.
@@ -108,7 +77,8 @@ De_Bruijn_Graph::De_Bruijn_Graph() {
     // X-dimension must have the size of (m_line_size-(m_kmer-1))*m_lines*2, 
     // because for each k_mer we create 2 k_1_mers.
     counter = 0;
-    Amino k_1_mer [(m_line_size-(m_kmer-1))*m_lines*2][m_kmer-1];
+    Amino k_1_mer [(m_line_size-(m_kmer-1))*m_lines*2][m_kmer-1];   //2-D Amino array.
+    
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
         
         for (int j = 0, c = 0; j <= m_kmer-2; j++, c++){
@@ -120,7 +90,7 @@ De_Bruijn_Graph::De_Bruijn_Graph() {
     
     // =====================
     // We create those two arrays k_1_mers_int and k_1_mers_string in order 
-    // to have acces to those values by m_k_1_mers11 and m_k_1_mers_string_11
+    // to have acces to those values by m_k_1_mers_int_11 and m_k_1_mers_string_11
     // by the other functions of the class.
     int k_1_mers_int[(m_line_size-(m_kmer-1))*m_lines*2];
     std::string k_1_mers_string[(m_line_size-(m_kmer-1))*m_lines*2];
@@ -132,8 +102,10 @@ De_Bruijn_Graph::De_Bruijn_Graph() {
         int helper;
         char c;
         for(int j =0 ; j < m_kmer-1; j++){
-            //std::cout << static_cast<int>(k_1_mers[i][j]) << " ";
-            helper = static_cast<int>(k_1_mer[i][j]);  
+            // For example if k_1_mer[i][j] =  A then helper =  1
+            helper = static_cast<int>(k_1_mer[i][j]);
+            
+            // For example if k_1_mer[i][j] =  A then c =  A  
             c = static_cast<char>(static_cast<int>(k_1_mer[i][j]) + 'A' - 1);
             
             s = s +  std::to_string(helper);
@@ -143,23 +115,14 @@ De_Bruijn_Graph::De_Bruijn_Graph() {
         k_1_mers_string[i] = s2;
 
     }
-    // Dynamically allocate memory for two_mers11
-    m_k_1_mers11 = new Amino*[(m_line_size-(m_kmer-1))*m_lines*2];
-    for (int i = 0; i < ((m_line_size-(m_kmer-1))*m_lines*2); i++) {
-        m_k_1_mers11[i] = new Amino[m_kmer-1];
-        for (int j = 0; j<m_kmer-1; j++){
-            m_k_1_mers11[i][j] = k_1_mer[i][j];
-        }
-    }
-    m_k_1_mers_int_11 = new int [(m_line_size-(m_kmer-1))*m_lines*2];
+    
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
-        m_k_1_mers_int_11[i] = k_1_mers_int[i];
+        m_k_1_mers_int.push_back(k_1_mers_int[i]);
     }
 
     
-    m_k_1_mers_string_11 = new std::string [(m_line_size-(m_kmer-1))*m_lines*2];
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
-        m_k_1_mers_string_11[i] = k_1_mers_string[i];
+        m_k_1_mers_string.push_back(k_1_mers_string[i]);
     }
     
 }
@@ -170,18 +133,6 @@ De_Bruijn_Graph::De_Bruijn_Graph() {
 
 // Destructor
 De_Bruijn_Graph::~De_Bruijn_Graph() {
-    // Deallocate m_k_1_mers11
-    for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++) {
-        delete[] m_k_1_mers11[i];
-    
-    }
-    delete[] m_k_1_mers11;
-
-    // Deallocate m_k_1_mers_int_11
-    delete[] m_k_1_mers_int_11;
-
-    // Deallocate m_k_1_mers_string_11
-    delete[] m_k_1_mers_string_11;
 
     // Deallocate m_adj (the dynamically allocated array of vectors)
     delete[] m_adj;
@@ -237,15 +188,14 @@ void De_Bruijn_Graph::add_edge(int s, int d) {
 
 
 
-
-
-
+//=========================================================================================================//
+//          Function that creates the graph.
 void De_Bruijn_Graph::create_the_graph(){
     int counter = 0;
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
-        if(! element_exists_in_vector(m_vec1, m_k_1_mers_int_11[i])){
-            m_vec1.push_back(m_k_1_mers_int_11[i]);  
-             m_node.push_back(m_k_1_mers_string_11[i]); 
+        if(! element_exists_in_vector(m_vec1, m_k_1_mers_int[i])){
+            m_vec1.push_back(m_k_1_mers_int[i]);  
+             m_node.push_back(m_k_1_mers_string[i]); 
             counter++;
         }
         
@@ -263,8 +213,8 @@ void De_Bruijn_Graph::create_the_graph(){
     }
     int i_s,i_d;
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
-        i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int_11[i]);
-        i_d = index_of_element_in_vector(m_vec1, m_k_1_mers_int_11[i+1]);
+        i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i]);
+        i_d = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i+1]);
         std::string i_s_String = std::to_string(i_s);
         std::string i_d_String = std::to_string(i_d);
 
@@ -278,6 +228,9 @@ void De_Bruijn_Graph::create_the_graph(){
     }
 
 }
+
+
+
 
 
 // Print the graph
@@ -339,7 +292,6 @@ void De_Bruijn_Graph::print_euler_path(){
             std::cout << m_node[node];
     }
 }
-
 
 
 

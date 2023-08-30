@@ -1,14 +1,18 @@
 #ifndef DEBRUIJNGRAPH_H
 #define DEBRUIJNGRAPH_H
 
+#include <iostream>
 #include <vector>
 #include <string>
 #include <unordered_map>
+
+
 
 enum class Amino : int32_t
 {
     A = 1,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,
 };
+
 
 class De_Bruijn_Graph {
     private:
@@ -41,7 +45,7 @@ class De_Bruijn_Graph {
         int out_degree(int v);
 
     public:
-        De_Bruijn_Graph();
+        De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector<std::vector<Amino>> aminos);
         ~De_Bruijn_Graph();
         
         // Creates the Graph.
@@ -61,16 +65,17 @@ class De_Bruijn_Graph {
         // Checks if the graph has an eulerian path or not.
         int find_euler(int start_node);
         
-
+        //==============================================================================================
         int m_lines, m_line_size, m_kmer, m_no_vertices;
-        int *m_k_1_mers_int_11; // array of integers.
-                                // each line has a k-1 mer at int form.
-        std::string *m_k_1_mers_string_11;  // string array it is used to print the graph correctly
-                                            // k-1 mers at string form.
+        
+        std::vector<int> m_k_1_mers_int;    // vector of integers.
+                                            // each line has a k-1 mer at int form.
+        
+                                
+        std::vector<std::string> m_k_1_mers_string;     // string vector it is used to print the graph correctly
+                                                        // k-1 mers at string form.
                                         
-        Amino **m_k_1_mers11;   // 2-d Array. k-1 mers at Amino form
-
-        std::vector<Amino> m_aminos;
+       
         std::vector<int> m_final_path;        
         
 
@@ -79,7 +84,7 @@ class De_Bruijn_Graph {
         std::vector<std::string> m_node;// Vector of strings. 
                                         // We will store the nodes at string form.
         
-        std::vector<int> *m_adj; // Array of std::vectors. 
+        std::vector<int>* m_adj; // Array of std::vectors. 
                                  // This is our graph.
 
         std::vector<int> path; // we will store the eulerian path.
