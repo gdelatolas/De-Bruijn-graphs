@@ -68,6 +68,8 @@ int main() {
 
 
     //=============================================================================================================
+
+    
     De_Bruijn_Graph g1(lines, line_size, kmer, aminos);
     g1.create_the_graph();
     g1.print_graph();
