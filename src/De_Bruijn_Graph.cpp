@@ -183,7 +183,7 @@ De_Bruijn_Graph::~De_Bruijn_Graph() {
 //=========================================================================================================//
 //          Function that checks if an element already exists in a vector.
 template <typename T>
-bool De_Bruijn_Graph::elementExistsInVector(const std::vector<T>& v, const T& element, size_t start) {
+bool De_Bruijn_Graph::element_exists_in_vector(const std::vector<T>& v, const T& element, size_t start) {
     std::vector<T> temp = v;
     for (size_t i = start; i < temp.size(); i++) {
         if (temp[i] == element)
@@ -196,7 +196,7 @@ bool De_Bruijn_Graph::elementExistsInVector(const std::vector<T>& v, const T& el
 //=========================================================================================================//
 //          Function that returns the index of an element at a vector.
 template <typename TT>
-int De_Bruijn_Graph::indexOfElementInVector(const std::vector<TT>& v, int element) {
+int De_Bruijn_Graph::index_of_element_in_vector(const std::vector<TT>& v, int element) {
     std::vector<TT> temp = v;
     for (int i = 0; i < temp.size(); i++){
         if (temp[i] == element)
@@ -208,7 +208,7 @@ int De_Bruijn_Graph::indexOfElementInVector(const std::vector<TT>& v, int elemen
 
 //=========================================================================================================//
 //          Function that adds an edge
-void De_Bruijn_Graph::addEdge(int s, int d) {
+void De_Bruijn_Graph::add_edge(int s, int d) {
     m_adj[s].push_back(d);
 }
 
@@ -216,7 +216,7 @@ void De_Bruijn_Graph::addEdge(int s, int d) {
 void De_Bruijn_Graph::create_the_graph(){
     int counter = 0;
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
-        if(! elementExistsInVector(m_vec1, m_k_1_mers_int_11[i])){
+        if(! element_exists_in_vector(m_vec1, m_k_1_mers_int_11[i])){
             m_vec1.push_back(m_k_1_mers_int_11[i]);  
              m_node.push_back(m_k_1_mers_string_11[i]); 
             counter++;
@@ -236,16 +236,16 @@ void De_Bruijn_Graph::create_the_graph(){
     }
     int i_s,i_d;
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
-        i_s = indexOfElementInVector(m_vec1, m_k_1_mers_int_11[i]);
-        i_d = indexOfElementInVector(m_vec1, m_k_1_mers_int_11[i+1]);
+        i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int_11[i]);
+        i_d = index_of_element_in_vector(m_vec1, m_k_1_mers_int_11[i+1]);
         std::string i_s_String = std::to_string(i_s);
         std::string i_d_String = std::to_string(i_d);
 
 
         // We check if the edge already exist.
-        if(!elementExistsInVector(vec_edges, i_s_String + i_d_String)){
+        if(!element_exists_in_vector(vec_edges, i_s_String + i_d_String)){
             vec_edges.push_back(i_s_String + i_d_String);
-            addEdge(i_s, i_d);
+            add_edge(i_s, i_d);
         }
 
     }
@@ -256,7 +256,7 @@ void De_Bruijn_Graph::create_the_graph(){
 // is the walk that crosses each edge exactly once, wich means that, 
 // uses each k-mer exactly once.
 // This is the eulerian walk.
-void De_Bruijn_Graph::printGraph() {
+void De_Bruijn_Graph::print_graph() {
     for (int d = 0; d < m_no_vertices; ++d) {
         std::cout << "\n Vertex " << m_node[d] << ":";
         for (auto x : m_adj[d]){
@@ -265,7 +265,7 @@ void De_Bruijn_Graph::printGraph() {
         std::cout<<"\n";
     }
 }
-void De_Bruijn_Graph::printEulerianPathCycle(int start_node)
+void De_Bruijn_Graph::print_eulerian_path_cycle(int start_node)
 {
     std::vector<int> circuit;
 
@@ -273,7 +273,7 @@ void De_Bruijn_Graph::printEulerianPathCycle(int start_node)
     {
         int next_node = m_adj[start_node].back();
         m_adj[start_node].pop_back();
-        printEulerianPathCycle(next_node);
+        print_eulerian_path_cycle(next_node);
     }
 
     circuit.push_back(start_node);
@@ -281,7 +281,7 @@ void De_Bruijn_Graph::printEulerianPathCycle(int start_node)
     for(auto node: circuit)
         m_final_path.push_back(node);
 }
-void De_Bruijn_Graph::print_Euler_path(){
+void De_Bruijn_Graph::print_euler_path(){
     for(int i = m_final_path.size() - 1; i >= 0; i--){
         int node = m_final_path[i];
         if(i != 0)
@@ -291,9 +291,9 @@ void De_Bruijn_Graph::print_Euler_path(){
     }
 }
 
-int De_Bruijn_Graph::find_Euler(int start_node)
+int De_Bruijn_Graph::find_euler(int start_node)
 {
-    if(!Strongly_Connected_Graph())	{//multi-component edged graph
+    if(!strongly_connected_graph())	{//multi-component edged graph
         std::cout << "The graph is not fully-connected.";
         return 0;		//All non-zero degree vertices should be connected
 
@@ -323,35 +323,35 @@ int De_Bruijn_Graph::find_Euler(int start_node)
     return 0;
 }
 
-void De_Bruijn_Graph::create_Euler_Path_Cycle()
+void De_Bruijn_Graph::create_euler_path_cycle()
 {
     int start_node = 0;
-    int ret = find_Euler(start_node);
+    int ret = find_euler(start_node);
     if(ret == 0)
         std::cout << "Graph is NOT an Euler graph\n";
     else if(ret == 1)
     {
         std::cout << "Graph is Semi-Eulerian\n";
-        printEulerianPathCycle(start_node);
+        print_eulerian_path_cycle(start_node);
     }
     else
     {
         std::cout << "Graph is Eulerian (Euler circuit)\n";
-        printEulerianPathCycle(start_node);
+        print_eulerian_path_cycle(start_node);
     }
     std::cout << "\n";
 }
-void De_Bruijn_Graph::DFS(int curr, std::vector<bool>& visited, std::vector<int>& path)
+void De_Bruijn_Graph::dfs(int curr, std::vector<bool>& visited, std::vector<int>& path)
 {
     visited[curr] = true;
     path.push_back(curr);
     for(auto it: m_adj[curr])
     {
         if(!visited[it])
-            DFS(it, visited, path);
+            dfs(it, visited, path);
     }
 }
-bool De_Bruijn_Graph::Strongly_Connected_Graph()
+bool De_Bruijn_Graph::strongly_connected_graph()
 {
     std::vector<bool> visited(m_no_vertices, false);
     int node = -1;	//Node to start DFS
@@ -364,7 +364,7 @@ bool De_Bruijn_Graph::Strongly_Connected_Graph()
     if(node == -1)	//No start node was found-->No edges are present in graph
         return true; //It's always Eulerian
 
-    DFS(node, visited, path);
+    dfs(node, visited, path);
     //Check if all the non-zero vertices are visited
     for(int i = 0; i < m_no_vertices; ++i)
         if(visited[i] == false and m_adj[i].size() > 0)
