@@ -58,20 +58,24 @@ class De_Bruijn_Graph {
 
     public:
         int m_lines, m_line_size, m_kmer, m_no_vertices;
-        int *m_k_1_mers_int_11; // k-1 mers at int form
-        std::string *m_k_1_mers_string_11; // k-1 mers at string form.
-                                           // This pointer-array it is used to print the graph correctly.
+        int *m_k_1_mers_int_11; // array of integers.
+                                // each line has a k-1 mer at int form.
+        std::string *m_k_1_mers_string_11;  // string array it is used to print the graph correctly
+                                            // k-1 mers at string form.
+                                        
         Amino **m_k_1_mers11;   // k-1 mers at Amino form
 
         std::vector<Amino> m_aminos;
+        std::vector<int> m_final_path;        
+       
 
         std::vector<int> m_vec1; // the two mers values.
         std::vector<int> m_vec2; // two mers indicies at the two merss array.
         std::vector<int> m_vec3; // values 0 1 2 .. no_vertices-1.
         std::vector<std::string> m_node; // We will store the nodes at string form.
         
-        // Add edge, including self-loop
-        std::vector<int> *m_adj; // Change to pointer
+        
+        std::vector<int>* m_adj; // Pointer to an std::vector.
         std::vector<int> path; // we will store the eulerian path.s
 
         De_Bruijn_Graph(){
@@ -289,11 +293,6 @@ class De_Bruijn_Graph {
                 std::cout<<"\n";
             }
         }
-        
-        
-
-
-    
         // Destructor
         ~De_Bruijn_Graph() {
             // Deallocate m_k_1_mers11
@@ -312,7 +311,6 @@ class De_Bruijn_Graph {
             // Deallocate m_adj (the dynamically allocated array of vectors)
             delete[] m_adj;
         }
-        std::vector<int> m_final_path;        
         void printEulerianPathCycle(int start_node)
         {
             std::vector<int> circuit;
@@ -403,7 +401,7 @@ class De_Bruijn_Graph {
         }
         bool Strongly_Connected_Graph()
         {
-            std::vector<bool> visited(m_no_vertices+1, false);
+            std::vector<bool> visited(m_no_vertices, false);
             int node = -1;	//Node to start DFS
             for(int i = 0; i < m_no_vertices; ++i)
                 if(m_adj[i].size() > 0)
