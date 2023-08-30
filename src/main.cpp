@@ -9,6 +9,5 @@ int main() {
         g1.create_euler_path_cycle();
         g1.print_euler_path();
     }
-
     return 0;
 }

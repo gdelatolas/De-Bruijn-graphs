@@ -24,6 +24,10 @@ std::unordered_map<char, Amino> aminoMap = {
         {'T', Amino::T},
 };
 
+
+
+
+
 // Constructor
 De_Bruijn_Graph::De_Bruijn_Graph() {
 
@@ -160,6 +164,10 @@ De_Bruijn_Graph::De_Bruijn_Graph() {
     
 }
 
+
+
+
+
 // Destructor
 De_Bruijn_Graph::~De_Bruijn_Graph() {
     // Deallocate m_k_1_mers11
@@ -180,6 +188,10 @@ De_Bruijn_Graph::~De_Bruijn_Graph() {
 }
 
 
+
+
+
+
 //=========================================================================================================//
 //          Function that checks if an element already exists in a vector.
 template <typename T>
@@ -191,6 +203,8 @@ bool De_Bruijn_Graph::element_exists_in_vector(const std::vector<T>& v, const T&
     }
     return false;
 }
+
+
 
 
 //=========================================================================================================//
@@ -206,11 +220,24 @@ int De_Bruijn_Graph::index_of_element_in_vector(const std::vector<TT>& v, int el
 }
 
 
+
+
+
+
 //=========================================================================================================//
 //          Function that adds an edge
 void De_Bruijn_Graph::add_edge(int s, int d) {
     m_adj[s].push_back(d);
 }
+
+
+
+
+
+
+
+
+
 
 
 void De_Bruijn_Graph::create_the_graph(){
@@ -251,6 +278,8 @@ void De_Bruijn_Graph::create_the_graph(){
     }
 
 }
+
+
 // Print the graph
 // Keep in mind that the walk that allows us to reconstruct the genome 
 // is the walk that crosses each edge exactly once, wich means that, 
@@ -265,6 +294,17 @@ void De_Bruijn_Graph::print_graph() {
         std::cout<<"\n";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 void De_Bruijn_Graph::print_eulerian_path_cycle(int start_node)
 {
     std::vector<int> circuit;
@@ -282,6 +322,14 @@ void De_Bruijn_Graph::print_eulerian_path_cycle(int start_node)
         m_final_path.push_back(node);
 }
 
+
+
+
+
+
+
+
+
 void De_Bruijn_Graph::print_euler_path(){
     for(int i = m_final_path.size() - 1; i >= 0; i--){
         int node = m_final_path[i];
@@ -291,6 +339,14 @@ void De_Bruijn_Graph::print_euler_path(){
             std::cout << m_node[node];
     }
 }
+
+
+
+
+
+
+
+
 
 int De_Bruijn_Graph::find_euler(int start_node)
 {
@@ -324,6 +380,11 @@ int De_Bruijn_Graph::find_euler(int start_node)
     return 0;
 }
 
+
+
+
+
+
 void De_Bruijn_Graph::create_euler_path_cycle()
 {
     int start_node = 0;
@@ -342,6 +403,10 @@ void De_Bruijn_Graph::create_euler_path_cycle()
     }
     std::cout << "\n";
 }
+
+
+
+
 void De_Bruijn_Graph::dfs(int curr, std::vector<bool>& visited, std::vector<int>& path)
 {
     visited[curr] = true;
@@ -352,6 +417,10 @@ void De_Bruijn_Graph::dfs(int curr, std::vector<bool>& visited, std::vector<int>
             dfs(it, visited, path);
     }
 }
+
+
+
+
 bool De_Bruijn_Graph::strongly_connected_graph()
 {
     std::vector<bool> visited(m_no_vertices, false);
@@ -372,6 +441,10 @@ bool De_Bruijn_Graph::strongly_connected_graph()
             return false;	//We have edges in multi-component
     return true;
 }
+
+
+
+
 int De_Bruijn_Graph::in_degree(int v)
 {
     int degree = 0;
@@ -385,6 +458,10 @@ int De_Bruijn_Graph::in_degree(int v)
     }
     return degree;
 }
+
+
+
+
 
 int De_Bruijn_Graph::out_degree(int v)
 {

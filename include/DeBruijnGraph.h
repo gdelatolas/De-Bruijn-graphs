@@ -44,10 +44,12 @@ class De_Bruijn_Graph {
         De_Bruijn_Graph();
         ~De_Bruijn_Graph();
         
+        // Creates the Graph.
         void create_the_graph();
+        // Print the graph using: m_adj.
         void print_graph();
 
-        // Just calls print_eulerian_path_cycle.
+        // Just calls the function: print_eulerian_path_cycle.
         void create_euler_path_cycle();
 
         // Creates the eulerian path cycle, fill the m_final_path with the correct nodes.
@@ -74,12 +76,13 @@ class De_Bruijn_Graph {
 
         std::vector<int> m_vec1; // the two mers values.
 
-        std::vector<std::string> m_node; // Vector of strings. 
+        std::vector<std::string> m_node;// Vector of strings. 
                                         // We will store the nodes at string form.
         
         std::vector<int> *m_adj; // Array of std::vectors. 
-                                 //  
-        std::vector<int> path; // we will store the eulerian path.s
+                                 // This is our graph.
+
+        std::vector<int> path; // we will store the eulerian path.
 };
 
 #endif // DEBRUIJNGRAPH_H
