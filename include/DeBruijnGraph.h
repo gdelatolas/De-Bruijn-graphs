@@ -85,7 +85,7 @@ class De_Bruijn_Graph {
         std::vector<int> m_final_path;        
         
 
-        std::vector<int> m_vec1; // We store the nodes at int form
+        std::vector<int> m_vec1; // We store the nodes at integer form
 
         std::vector<std::string> m_node;// Vector of strings. 
                                         // We will store the nodes at string form.
