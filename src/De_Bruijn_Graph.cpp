@@ -207,7 +207,6 @@ void De_Bruijn_Graph::create_the_graph(){
     for (int i = 0; i < m_vec1.size(); i ++){
         std::cout << m_vec1[i] << "\n";
     }
-    
     int i_s,i_d;
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
         i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i]);
@@ -316,7 +315,6 @@ int De_Bruijn_Graph::find_euler(int start_node)
         {
             start_nodes++;
             start_node = i;
-            std::cout << "m_node[i] = " << m_node[i] << "\n";
         }
         else if(in - out == 1)
             end_nodes++;
