@@ -208,6 +208,7 @@ class De_Bruijn_Graph {
             }
             
         }
+    private:
 
         template <typename T>
         bool elementExistsInVector(const std::vector<T>& v, const T& element, size_t start = 0) {
@@ -232,7 +233,7 @@ class De_Bruijn_Graph {
         void addEdge(int s, int d) {
             m_adj[s].push_back(d);
         }
-        
+    public:    
 
         void create_the_graph(){
             int counter = 0;
