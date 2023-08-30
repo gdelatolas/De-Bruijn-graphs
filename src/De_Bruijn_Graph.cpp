@@ -92,8 +92,6 @@ De_Bruijn_Graph::De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector
     // We create those two arrays k_1_mers_int and k_1_mers_string in order 
     // to have acces to those values by m_k_1_mers_int_11 and m_k_1_mers_string_11
     // by the other functions of the class.
-    int k_1_mers_int[(m_line_size-(m_kmer-1))*m_lines*2];
-    std::string k_1_mers_string[(m_line_size-(m_kmer-1))*m_lines*2];
     
     std::cout<< "\nk-1 mers\n";
     for(int i=0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
@@ -111,14 +109,8 @@ De_Bruijn_Graph::De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector
             s = s +  std::to_string(helper);
             s2 += c;
         }
-        k_1_mers_int[i] = std::stoi(s);
-        k_1_mers_string[i] = s2;
-
-    }
-    
-    for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
-        m_k_1_mers_int.push_back(k_1_mers_int[i]);
-        m_k_1_mers_string.push_back(k_1_mers_string[i]);
+        m_k_1_mers_int.push_back(std::stoi(s));
+        m_k_1_mers_string.push_back(s2);
     }
     
 }
