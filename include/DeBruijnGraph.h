@@ -70,16 +70,22 @@ class De_Bruijn_Graph {
         
         std::vector<int> m_k_1_mers_int;    // vector of integers.
                                             // each line has a k-1 mer at int form.
+                                            // We have created this vector in order
+                                            // to have acces to k_1_mers_int 
+                                            // from every function of the class.
         
                                 
         std::vector<std::string> m_k_1_mers_string;     // string vector it is used to print the graph correctly
                                                         // k-1 mers at string form.
+                                                        // We have created this vector in order
+                                                        // to have acces to k_1_mers_string 
+                                                        // from every function of the class.
                                         
        
         std::vector<int> m_final_path;        
         
 
-        std::vector<int> m_vec1; // the two mers values.
+        std::vector<int> m_vec1; // We store the nodes at int form
 
         std::vector<std::string> m_node;// Vector of strings. 
                                         // We will store the nodes at string form.

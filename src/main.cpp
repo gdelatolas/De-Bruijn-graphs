@@ -24,10 +24,7 @@ std::unordered_map<char, Amino> aminoMap_1 = {
 };
 
 int main() {
-
-
-
-    //=============================================================================================================
+    
     int lines, line_size, kmer;
     std::cout << "Input the number of lines: ";
     std::cin >> lines;
@@ -52,6 +49,8 @@ int main() {
         } 
     }
     std::cout << "size = " << aminos.size() << "\n";
+    
+    
     //PRINTING THE aminos VECTOR.  
     std::cout << "\nAminos\n";
     for (int i = 0; i < lines; i++) {
@@ -65,6 +64,8 @@ int main() {
     std::cout << "Input the k-mer you want: ";
     std::cin >> kmer;
     
+
+
 
     //=============================================================================================================
     De_Bruijn_Graph g1(lines, line_size, kmer, aminos);

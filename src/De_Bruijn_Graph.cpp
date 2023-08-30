@@ -118,10 +118,6 @@ De_Bruijn_Graph::De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector
     
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
         m_k_1_mers_int.push_back(k_1_mers_int[i]);
-    }
-
-    
-    for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
         m_k_1_mers_string.push_back(k_1_mers_string[i]);
     }
     
@@ -195,7 +191,7 @@ void De_Bruijn_Graph::create_the_graph(){
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
         if(! element_exists_in_vector(m_vec1, m_k_1_mers_int[i])){
             m_vec1.push_back(m_k_1_mers_int[i]);  
-             m_node.push_back(m_k_1_mers_string[i]); 
+            m_node.push_back(m_k_1_mers_string[i]); 
             counter++;
         }
         
@@ -211,6 +207,7 @@ void De_Bruijn_Graph::create_the_graph(){
     for (int i = 0; i < m_vec1.size(); i ++){
         std::cout << m_vec1[i] << "\n";
     }
+    
     int i_s,i_d;
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
         i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i]);
