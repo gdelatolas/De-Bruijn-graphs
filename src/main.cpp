@@ -71,7 +71,7 @@ int main() {
     std::cout << "Input the k-mer you want: ";
     std::cin >> kmer;
     
-    
+
     int k_mer_vec_size = all_aminos  - (kmer-1) * lines; 
     std::vector<std::vector<Amino>> k_mer_vec(k_mer_vec_size, std::vector<Amino>(kmer));
 
@@ -90,7 +90,7 @@ int main() {
         }
         counter++;
     }
-    std::cout << "End of checkkk \n";
+    std::cout << "End of check \n";
     
     
     De_Bruijn_Graph g1(lines, kmer, k_mer_vec);
