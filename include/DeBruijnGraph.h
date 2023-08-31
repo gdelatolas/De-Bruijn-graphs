@@ -48,7 +48,7 @@ class De_Bruijn_Graph {
         std::vector<int> out__degree; //vector that holds the out_degree of each node
 
     public:
-        De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector<std::vector<Amino>> aminos);
+        De_Bruijn_Graph(int lines, int kmer, std::vector<std::vector <Amino>> k_mer_vec);
         ~De_Bruijn_Graph();
         
         // Creates the Graph.
@@ -69,7 +69,7 @@ class De_Bruijn_Graph {
         int find_euler(int start_node);
         
         //==============================================================================================
-        int m_lines, m_line_size, m_kmer, m_no_vertices;
+        int m_lines, m_kmer, m_no_vertices, m_k_mer_size;
         
         std::vector<int> m_k_1_mers_int;    // vector of integers.
                                             // each line has a k-1 mer at int form.

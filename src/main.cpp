@@ -29,9 +29,7 @@ int main() {
     std::cout << "Input the number of lines: ";
     std::cin >> lines;
 
-    std::cout << "Input the size of each line: ";
-    std::cin >> line_size;
-
+   
     //The vector aminos stores our input lines.
     std::vector<std::vector<Amino>> aminos(lines, std::vector<Amino>());
 
@@ -50,27 +48,46 @@ int main() {
     }
     std::cout << "size = " << aminos.size() << "\n";
     
-    
+    int all_aminos=0;
     //PRINTING THE aminos VECTOR.  
     std::cout << "\nAminos\n";
     for (int i = 0; i < lines; i++) {
         for (Amino amino : aminos[i]) {
             char aminoChar = static_cast<char>(static_cast<int>(amino) + 'A' - 1);
             std::cout << aminoChar;
+            all_aminos++;
         }
+        
         std::cout << "\n";
     } 
-        
+    std::cout << "All aminos : " << all_aminos << "\n";
+
     std::cout << "Input the k-mer you want: ";
     std::cin >> kmer;
     
+    // I HAVE TO CORRECT THE K_MER_VEC_SIZE. SOSOSOSOSO
+    int k_mer_vec_size = all_aminos  - (kmer-1) * lines; 
+    std::vector<std::vector<Amino>> k_mer_vec(k_mer_vec_size, std::vector<Amino>(kmer));
 
+    int counter = 0 ; // counter is used to identify the input line.
+    int index = 0;    // index indicates the line of the k_mer array.
+                        // index = numbers of total k_mers = (m_line_size - (m_kmer -1))* m_lines
+    std::cout << "HERE \n";
+    while (counter < lines){
+        //k_mer_vec[lines].reserve(aminos[counter].size() - (kmer -1));
+        for (int i = 0; i < aminos[counter].size() - (kmer -1); i++){
 
-
-    //=============================================================================================================
-
+            for(int j = 0; j < kmer; j++){
+                k_mer_vec[index][j] = aminos[counter][i+j];
+            }
+            index++;
+        }
+        counter++;
+    }
+    std::cout << "End of checkkk \n";
     
-    De_Bruijn_Graph g1(lines, line_size, kmer, aminos);
+    
+    De_Bruijn_Graph g1(lines, kmer, k_mer_vec);
     g1.print_graph();
 
     if (g1.find_euler(g1.m_vec1[0]) > 0) {
