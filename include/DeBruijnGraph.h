@@ -90,7 +90,7 @@ class De_Bruijn_Graph {
         std::vector<std::string> m_node;// Vector of strings. 
                                         // We will store the nodes at string form.
         
-        std::vector<int>* m_adj; // Array of std::vectors. 
+        std::vector<std::vector<int>> m_adj; // Array of std::vectors. 
                                  // This is our graph.
 
         std::vector<int> path; // It is used for DFS.

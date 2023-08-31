@@ -115,11 +115,7 @@ De_Bruijn_Graph::De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector
 
 
 // Destructor
-De_Bruijn_Graph::~De_Bruijn_Graph() {
-
-    // Deallocate m_adj (the dynamically allocated array of vectors)
-    delete[] m_adj;
-}
+De_Bruijn_Graph::~De_Bruijn_Graph() {}
 
 
 
@@ -185,8 +181,9 @@ void De_Bruijn_Graph::create_the_graph(){
     }
     // We will have one node per distinct k-1 mer.
     m_no_vertices = counter;
-    m_adj = new std::vector<int>[m_no_vertices];
-
+    
+    m_adj.resize(m_no_vertices);
+    
     // We use this vector in order to store the edges as strings.
     std::vector<std::string> vec_edges;
 
