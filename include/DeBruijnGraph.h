@@ -42,8 +42,10 @@ class De_Bruijn_Graph {
 
         // Function that counts the in_degree in edges at one vertex v.
         int in_degree(int v);
+        std::vector<int> in__degree;  //vector that holds the in_degree of each node
         // Function that counts the out_degree in edges at one vertex v.
         int out_degree(int v);
+        std::vector<int> out__degree; //vector that holds the out_degree of each node
 
     public:
         De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector<std::vector<Amino>> aminos);

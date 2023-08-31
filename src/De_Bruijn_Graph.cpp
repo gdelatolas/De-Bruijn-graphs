@@ -107,14 +107,67 @@ De_Bruijn_Graph::De_Bruijn_Graph(int lines, int line_size, int kmer, std::vector
         m_k_1_mers_int.push_back(std::stoi(s));
         m_k_1_mers_string.push_back(s2);
     }
+    create_the_graph();
+}
+
+
+//=========================================================================================================//
+//          Function that creates the graph.
+void De_Bruijn_Graph::create_the_graph(){
+    int counter = 0;
+    for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
+        if(! element_exists_in_vector(m_vec1, m_k_1_mers_int[i])){
+            m_vec1.push_back(m_k_1_mers_int[i]);  
+            m_node.push_back(m_k_1_mers_string[i]); 
+            counter++;
+        }
+        
+    }
+    // We will have one node per distinct k-1 mer.
+    m_no_vertices = counter;
     
+    m_adj.resize(m_no_vertices);
+    
+    // We use this vector in order to store the edges as strings.
+    std::vector<std::string> vec_edges;
+    
+    std::cout << "\nVECTOR\n";
+    for (int i = 0; i < m_vec1.size(); i ++){
+        std::cout << m_vec1[i] << "\n";
+    }
+    int i_s, i_d;
+    for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
+        i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i]);
+        i_d = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i+1]);
+
+        // index_of_element_in_vector always return a value because every element of
+        // the arrau m_k_1_int exist exactly once at the m_vec1 vector.
+        std::string i_s_String = std::to_string(i_s);
+        std::string i_d_String = std::to_string(i_d);
+
+
+        // We check if the edge already exist.
+        if(!element_exists_in_vector(vec_edges, i_s_String + i_d_String)){
+            vec_edges.push_back(i_s_String + i_d_String);
+            add_edge(i_s, i_d);
+        }
+
+    }
+
+    // Compute in_degree and out_degree for each node.
+    for(int i = 0; i < m_no_vertices; ++i)
+    {
+        in__degree.push_back( in_degree(i));
+        out__degree.push_back(out_degree(i));
+    }
+
 }
 
 
 
 
-
-// Destructor
+//=========================================================================================================//
+//          Destructor.
 De_Bruijn_Graph::~De_Bruijn_Graph() {}
 
 
@@ -165,58 +218,6 @@ void De_Bruijn_Graph::add_edge(int s, int d) {
 
 
 
-
-
-
-//=========================================================================================================//
-//          Function that creates the graph.
-void De_Bruijn_Graph::create_the_graph(){
-    int counter = 0;
-    for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i++){
-        if(! element_exists_in_vector(m_vec1, m_k_1_mers_int[i])){
-            m_vec1.push_back(m_k_1_mers_int[i]);  
-            m_node.push_back(m_k_1_mers_string[i]); 
-            counter++;
-        }
-        
-    }
-    // We will have one node per distinct k-1 mer.
-    m_no_vertices = counter;
-    
-    m_adj.resize(m_no_vertices);
-    
-    // We use this vector in order to store the edges as strings.
-    std::vector<std::string> vec_edges;
-    
-    std::cout << "\nVECTOR\n";
-    for (int i = 0; i < m_vec1.size(); i ++){
-        std::cout << m_vec1[i] << "\n";
-    }
-    int i_s, i_d;
-    for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
-        i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i]);
-        i_d = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i+1]);
-
-        // index_of_element_in_vector always return a value because every element of
-        // the arrau m_k_1_int exist exactly once at the m_vec1 vector.
-        std::string i_s_String = std::to_string(i_s);
-        std::string i_d_String = std::to_string(i_d);
-
-
-        // We check if the edge already exist.
-        if(!element_exists_in_vector(vec_edges, i_s_String + i_d_String)){
-            vec_edges.push_back(i_s_String + i_d_String);
-            add_edge(i_s, i_d);
-        }
-
-    }
-
-}
-
-
-
-
-
 // Print the graph
 // Keep in mind that the walk that allows us to reconstruct the genome 
 // is the walk that crosses each edge exactly once, wich means that, 
@@ -231,10 +232,6 @@ void De_Bruijn_Graph::print_graph() {
         std::cout<<"\n";
     }
 }
-
-
-
-
 
 
 
@@ -258,7 +255,6 @@ void De_Bruijn_Graph::print_eulerian_path_cycle(int start_node)
     for(auto node: circuit)
         m_final_path.push_back(node);
 }
-
 
 
 
@@ -295,8 +291,8 @@ int De_Bruijn_Graph::find_euler(int start_node)
     int start_nodes = 0, end_nodes = 0;
     for(int i = 0; i < m_no_vertices; ++i)
     {
-        int in = in_degree(i);
-        int out = out_degree(i);
+        int in = in__degree[i];
+        int out = out__degree[i];
         if(out - in > 1 or in - out > 1)
             return 0;
         else if(out - in == 1)
@@ -314,6 +310,10 @@ int De_Bruijn_Graph::find_euler(int start_node)
 
     return 0;
 }
+
+
+
+
 
 
 
@@ -342,6 +342,8 @@ void De_Bruijn_Graph::create_euler_path_cycle()
 
 
 
+
+
 void De_Bruijn_Graph::dfs(int curr, std::vector<bool>& visited, std::vector<int>& path)
 {
     visited[curr] = true;
@@ -352,6 +354,8 @@ void De_Bruijn_Graph::dfs(int curr, std::vector<bool>& visited, std::vector<int>
             dfs(it, visited, path);
     }
 }
+
+
 
 
 
@@ -376,6 +380,8 @@ bool De_Bruijn_Graph::strongly_connected_graph()
             return false;	//We have edges in multi-component
     return true;
 }
+
+
 
 
 
