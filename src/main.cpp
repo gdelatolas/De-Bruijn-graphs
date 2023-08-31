@@ -1,5 +1,11 @@
 #include "../include/DeBruijnGraph.h"
 
+struct amino_distance
+{
+    Amino amino;
+    int start_m;
+};
+
 std::unordered_map<char, Amino> aminoMap_1 = {
         {'A', Amino::A},
         {'B', Amino::B},
@@ -65,13 +71,13 @@ int main() {
     std::cout << "Input the k-mer you want: ";
     std::cin >> kmer;
     
-    // I HAVE TO CORRECT THE K_MER_VEC_SIZE. SOSOSOSOSO
+    
     int k_mer_vec_size = all_aminos  - (kmer-1) * lines; 
     std::vector<std::vector<Amino>> k_mer_vec(k_mer_vec_size, std::vector<Amino>(kmer));
 
     int counter = 0 ; // counter is used to identify the input line.
     int index = 0;    // index indicates the line of the k_mer array.
-                        // index = numbers of total k_mers = (m_line_size - (m_kmer -1))* m_lines
+                        // index = numbers of total k_mers = all_aminos  - (kmer-1) * lines
     std::cout << "HERE \n";
     while (counter < lines){
         //k_mer_vec[lines].reserve(aminos[counter].size() - (kmer -1));
@@ -96,3 +102,5 @@ int main() {
     }
     return 0;
 }
+
+
