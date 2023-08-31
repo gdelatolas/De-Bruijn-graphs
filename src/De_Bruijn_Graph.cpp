@@ -119,19 +119,20 @@ De_Bruijn_Graph::~De_Bruijn_Graph() {}
 
 
 
+//auto it_9    = std::find(seq.begin(), seq.end(), 9);
 
+//auto index_9 = (index_t)std::distance(seq.begin(), it_9);
 
 
 //=========================================================================================================//
 //          Function that checks if an element already exists in a vector.
 template <typename T>
-bool De_Bruijn_Graph::element_exists_in_vector(const std::vector<T>& v, const T& element, size_t start) {
+bool De_Bruijn_Graph::element_exists_in_vector(const std::vector<T>& v, const T& element) {
     std::vector<T> temp = v;
-    for (size_t i = start; i < temp.size(); i++) {
-        if (temp[i] == element)
-            return true;
-    }
-    return false;
+    auto finder = std::find(v.begin(), v.end(), element);
+    if (finder == v.end())
+        return false;
+    return true;
 }
 
 
@@ -141,12 +142,12 @@ bool De_Bruijn_Graph::element_exists_in_vector(const std::vector<T>& v, const T&
 //          Function that returns the index of an element at a vector.
 template <typename TT>
 int De_Bruijn_Graph::index_of_element_in_vector(const std::vector<TT>& v, int element) {
-    std::vector<TT> temp = v;
-    for (int i = 0; i < temp.size(); i++){
-        if (temp[i] == element)
-            return i;
-    }
-    return -1;
+    auto finder = std::find(v.begin(), v.end(), element);
+    
+    if (finder == v.end())
+        return -1; // Element not found, return -1
+    else
+        return std::distance(v.begin(), finder); // Return the index of the found element
 }
 
 
@@ -186,15 +187,18 @@ void De_Bruijn_Graph::create_the_graph(){
     
     // We use this vector in order to store the edges as strings.
     std::vector<std::string> vec_edges;
-
+    
     std::cout << "\nVECTOR\n";
     for (int i = 0; i < m_vec1.size(); i ++){
         std::cout << m_vec1[i] << "\n";
     }
-    int i_s,i_d;
+    int i_s, i_d;
     for (int i = 0; i < (m_line_size-(m_kmer-1))*m_lines*2; i+=2){
         i_s = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i]);
         i_d = index_of_element_in_vector(m_vec1, m_k_1_mers_int[i+1]);
+
+        // index_of_element_in_vector always return a value because every element of
+        // the arrau m_k_1_int exist exactly once at the m_vec1 vector.
         std::string i_s_String = std::to_string(i_s);
         std::string i_d_String = std::to_string(i_d);
 

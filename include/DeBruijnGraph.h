@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <algorithm>
 
 
 
@@ -19,7 +20,7 @@ class De_Bruijn_Graph {
 
         // Returns 1 if the argument element exist in vector v.
         template <typename T>
-        bool element_exists_in_vector(const std::vector<T>& v, const T& element, size_t start = 0);
+        bool element_exists_in_vector(const std::vector<T>& v, const T& element);
         
         // Returns the index of an element at a vector.
         template <typename TT>
